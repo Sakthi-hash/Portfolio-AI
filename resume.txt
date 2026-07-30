@@ -1,0 +1,141 @@
+SAKTHIKRISHNA G
+Phone: +91 9360138590
+Email: sakthikrishna.g.work@gmail.com
+LinkedIn: linkedin.com/in/sakthikrishna-g
+GitHub: github.com/Sakthi-hash
+
+Executive Summary:
+Electronics and Communication Engineering student and highly motivated fresher seeking an Embedded Systems Engineer role. Specializes in Embedded C/C programming, microcontroller integration (ESP32, Arduino), hardware troubleshooting, and circuit simulation (EasyEDA, Tinkercad). Strong advocate of a "groundwork-first" engineering approach—getting hands-on in the field, mapping legacy layouts, resolving installation blockers, and coordinating directly with government officers and agricultural beneficiaries to deploy systems like a pro. Proactively seeks to apply academic knowledge and 4 hands-on internships (air traffic control, production engineering, electronic circuit testing) to develop robust automated systems.
+
+Technical Skills:
+- Programming: Embedded C, C, Java.
+- Embedded & Hardware: Arduino, Microcontrollers (ESP32, Arduino UNO, 8051), Sensors (INA219, ultrasonic, photodetectors), Oscilloscope, Function Generator, Soldering.
+- Tools & Software: Arduino IDE, EasyEDA, Tinkercad, ThingSpeak, Firebase.
+- Databases: SQLite.
+
+Soft Skills:
+- Communication & Teamwork
+- Project Management
+- Adaptability & Continuous Learning
+- Public Speaking & Coordination
+
+Professional Experience (Internships):
+1. Coimbatore International Airport — Student Intern (On-site)
+   June 2026 | 10 Days
+   - Observed and studied Communication, Navigation, and Surveillance (CNS) airport systems.
+   - Gained exposure to Air Traffic Control (ATC) operations and airport workflow processes.
+
+2. Vasantha Advanced Systems Pvt Ltd — Production Engineer Intern (On-site)
+   May–June 2026 | 30 Days
+   - Assisted in production and assembly operations for electronic systems.
+   - Supported testing, multi-meter inspection, and quality control of electronic products.
+
+3. Brigade LED Pvt Ltd — Production Engineer Intern (On-site)
+   May–June 2025 | 30 Days
+   - Assisted in production floor assembly processes for LED-based commercial products.
+   - Monitored production activities to ensure quality, circuit integrity, and process consistency.
+
+4. Brigade LED Pvt Ltd — Diploma Intern (On-site)
+   May–June 2023 | 30 Days
+   - Completed a 1-month internship during Diploma studies focusing on production assembly.
+   - Assisted in LED driver testing, board soldering, and electronic quality inspection.
+
+Academic & Engineering Projects:
+
+1. Resilient Street-Level Smart Distribution and Autonomous Fault Isolation System
+   Role: Lead Embedded & Firmware Developer (Current Final Year Project)
+   Overview: An autonomous street-level electrical distribution network with intelligent fault detection, isolation, self-healing routing, and anti-theft monitoring.
+   Detailed Phases & Implementation:
+   - Phase 1: Problem Identification - Addressed electricity theft, delayed fault isolation, long restoration times, manual fault detection, and large outage areas.
+   - Phase 2: Literature Survey - Researched Smart Grid standards, IoT distribution, LoRa capabilities, existing patents, and paper limitations to identify system novelty.
+   - Phase 3: System Architecture - Designed a pole-to-transformer hierarchical network with pole nodes, transformer nodes, ring topology, alternative backup supplies, and sectional control.
+   - Phase 4: Hardware Selection - Selected ESP32 (later improved to Arduino UNO for pole nodes), LoRa SX1278 for transceiver communications, and INA219 Current/Voltage sensors (finetuned over PZEM). Integrated relay modules, BMS, Li-ion battery backups, logic level converters, buzzers, and SD cards.
+   - Phase 5: Communication Design - Designed LoRa messaging formats, master-slave packet acknowledgments, retry mechanisms, and handshakes.
+   - Phase 6: Theft Detection Algorithm - Developed a comparison engine: Transformer Power vs. Sum of Pole Node Power. Utilized cable resistance and current measurements to calculate technical line loss and flag abnormalities via an adaptive line loss threshold.
+   - Phase 7: Fault Detection Algorithm - Programmed offline house sequence analysis to detect open circuits, line faults, and pole failures. Consecutive offline poles indicate line faults, whereas random offline poles indicate possible theft.
+   - Phase 8: Fault Isolation - Built autonomous sectional tripping logic. Trips only the affected section, keeping the rest of the electrical grid energized.
+   - Phase 9: Self Healing - Designed automatic restoration logic using alternate feeder pathways in a ring topology.
+   - Phase 10: Resilience Features - Implemented 'Store and Forward' (Micro SD logging during LoRa loss), 'Last Gasp' (battery alert sent right before system power down), and 'Safe Mode' buzzer alarms.
+   - Phase 11: Dashboard Development - Built a Python dashboard with live monitoring, event logging, historical analytics, and SQLite database storage.
+   - Phase 12: Analytics - Integrated risk modeling, theft probability engines, and heat map rendering modules.
+   - Phase 13 & 14: Documentation & Presentation - Completed full SRS documentation, patent comparisons, flowcharts, block diagrams, and technical PPTs.
+   - Phase 15: Future Scope - Incorporating AI theft forecasting, GIS mapping, edge AI, and smart solid-state breakers.
+
+2. Solar-Powered IoT-Enabled Precision Irrigation System
+   Status: Ongoing — Final Year Capstone Project
+   Funding: Unnat Bharat Abhiyan (UBA 2.0), sponsored by IIT Delhi | Project No. RP-03525G | Sanctioned 12-03-2026 | Budget: ₹99,500
+   Mentor: Dr. K. Shanthi, Associate Professor, ECE Dept, SKCT Coimbatore
+   My Role: Site Implementation, Field Groundwork & Hardware Connections
+   Overview: An automated precision irrigation setup deployed at Meenakshipuram agricultural farm (Coimbatore South) to optimize water usage using real-time soil, atmospheric, and weather data. Focuses heavily on thorough on-site groundwork and layout mapping.
+   Tech Stack: ESP32 DevKit V1, Firebase Realtime Database (control), ThingSpeak (analytics), OpenWeatherMap API (forecasts), Flutter (mobile app), 150W Solar Panel (powering control electronics independently), HTML Dashboard on Netlify.
+   Work Completed & Groundwork Actions:
+   - Coordinated directly with Dr. N. Gopinath, Assistant Director of Horticulture (Kinathukadavu), to finalize beneficiary farmer allotment and alignment.
+   - Conducted field mapping and physical layout inspections at Meenakshipuram farm to plan drip network routing around legacy buried pipe networks.
+   - Built a functional dashboard with ThingSpeak polling (every 15s) and coordinates-based weather forecasts.
+   - Implemented English/Tamil toggle for user usability.
+   - Designed non-invasive motor control: ESP32 relay module simulates momentary pushbutton pulses (Start/Stop) rather than switching high-power contactors directly.
+   - Programmed firmware safety boundaries: Irrigation starting is restricted to 8:30 AM–5:00 PM (matching three-phase power availability); stops are allowed anytime.
+   - Completed full SRS, architecture diagrams (7 subsystems), and budget breakdowns.
+   - Wrote setup and API integration guides.
+   Challenges Faced & Overcome:
+   - Legacy Infrastructure: Planning routing around existing buried pipes rather than from scratch, necessitating detailed as-built routing mapping.
+   - Non-invasive Control: Designing safe button-press simulation logic for 3HP/5HP three-phase motors without accessing raw contactor terminals.
+   - Credential Deployment: Securing and shifting the Netlify demo from placeholder to live Firebase configurations with full authentication security.
+   - Site Data Dependency: Finalizing system block diagrams dynamically after verifying motor room wiring layouts during site visits.
+
+3. Smart Crop Yield Predictor
+   Objective: Predict agricultural crop yield using machine learning and provide recommendations to farmers.
+   Work Completed:
+   - Researched crop yield modeling and collected agricultural datasets.
+   - Managed data preprocessing, handling missing variables, and feature scaling.
+   - Trained and optimized a Random Forest regression model.
+   - Developed a web interface in Streamlit for predictive visual analysis.
+   - Technologies: Python, Scikit-learn, Pandas, Streamlit.
+
+4. Ultrasonic Radar System
+   Objective: Design and construct an ultrasonic radar system using Arduino.
+   Work Completed:
+   - Wrote Arduino C/C++ firmware to control a servo motor sweeping 180 degrees.
+   - Integrated HC-SR04 ultrasonic sensor to measure distances in real-time.
+   - Designed obstacle mapping algorithms and processing layouts for visual feedback.
+   - Technologies: C/C++, Arduino IDE, Servo Motors, HC-SR04.
+
+5. Li-Fi Communication Model
+   Objective: Develop a working Light Fidelity (Li-Fi) setup for wireless transmission using light modulation.
+   Work Completed:
+   - Built LED-based optical transmitter circuits for audio and data signal modulation.
+   - Designed photo-detector receiver circuit with op-amp signal recovery and noise filtration.
+   - Conducted analog circuit testing, oscilloscope checks, and range optimization.
+   - Technologies: Circuit Design, LEDs, Photodiodes, Op-Amps.
+
+Education:
+- Sri Krishna College of Technology, Coimbatore, Tamil Nadu
+  Bachelor of Engineering (Electronics and Communication Engineering)
+  CGPA: 7.2 (Lateral Entry) | No History of Arrears | Expected Graduation: May 2027
+- Sankara Polytechnic College, Coimbatore, Tamil Nadu
+  Diploma in Electronics and Communication Engineering
+  CGPA: 8.1 (Distinction) | Graduation year: 2024
+- Kendriya Vidyalaya, Sivagangai, Tamil Nadu
+  Secondary Education [Class X, CBSE] | Year of Completion: 2021
+
+Awards & Accomplishments:
+- Academic Excellence Award (Topper) – Sankara Polytechnic College.
+- Best Team Co-ordinator Award – Sankara Polytechnic College.
+- Certificate of Full Attendance (100% attendance maintained throughout Diploma studies).
+- NPTEL Certification – Sustainable Development, Effective Learning for Professional Development.
+- Appointed Long Industrial Visit Coordinator (Diploma): Coordinated a 3-day ECE department Industrial Visit from scratch (first ECE department IV post-pandemic). Managed all logistics, industry permissions, and safety protocols, successfully resolving multiple tough on-road challenges to deliver a safe and educational tour.
+- Member – Student Committee & Anti-Ragging Committees (Diploma).
+
+Academic Presentations, Reports & Key Deliverables:
+1. Undergraduate (B.E. - UG) Deliverables:
+   - Smart Traffic System (Task Management): Designed an Autonomous Vehicle Task Management Simulator. Presented the control flow and task scheduling simulator to ECE faculty.
+   - Baseband M-ary PAM Transmission: Authored a PPT presentation analyzing multi-level Pulse Amplitude Modulation spectral and bandwidth efficiency.
+   - Smart Fabrics for Soldier Health Monitoring: Prepared a detailed research study on biosensors and conductive textile materials for health tracking.
+   - Optical Fiber Modes: Conducted an academic seminar analyzing single-mode vs. multi-mode waveguide modes and dispersion.
+   - Software Defined Networking (SDN): Prepared a comprehensive SDN technical question bank and controller architecture guide.
+   - Wireless Communication Paper Comparison: Done a comparative review paper analysis evaluating MIMO path loss models and capacity metrics.
+   - Entrepreneurship & Feasibility Study: Authored a cost-benefit business feasibility report covering scaling models.
+   - Engineering PPT Templates: Crafted custom block diagram slide layouts and ECE presentation slide designs.
+2. Diploma (Polytechnic) Deliverables:
+   - Temperature-Sensor Based Fan Cooling System: Built a working thermistor-driven cooling circuit prototype. Presented and demonstrated it to the review panel at Sankara Polytechnic.
+   - Event and IV Coordination: Prepared logistic briefings, budgets, and scheduling reports as IV Coordinator.

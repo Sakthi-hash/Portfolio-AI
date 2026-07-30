@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+.git/
+.gemini/
+.user_uploaded/
+.streamlit/
+*.pyc
+*.pyo
+*.pyd

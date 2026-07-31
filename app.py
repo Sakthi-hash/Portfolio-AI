@@ -1,6 +1,6 @@
 import streamlit as st
-import google.generativeai as genai
 import base64
+import time
 
 st.set_page_config(
     page_title="Sakthi Krishna G | AI Portfolio",
@@ -8,9 +8,56 @@ st.set_page_config(
     layout="wide",
 )
 
-# ==================================================
-# IMPORT DETAILS FROM EXTERNAL CONFIG (WITH AUTO-RELOAD)
-# ==================================================
+# Helper function to load CSS (defined early so loading screen can use it)
+def load_css():
+    st.markdown('<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">', unsafe_allow_html=True)
+    with open("assets/css/style.css", "r", encoding="utf-8") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+load_css()
+
+# Waking up loading screen on first run of a session
+if "initialized" not in st.session_state:
+    loading_placeholder = st.empty()
+    with loading_placeholder.container():
+        st.markdown(
+            """
+            <div style="text-align: center; margin-top: 150px; margin-bottom: 20px;">
+                <h2 style="color: #22d3ee; font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 700; text-shadow: 0 0 15px rgba(34, 211, 238, 0.3);">✦ Waking up the app</h2>
+                <p style="color: #94a3b8; font-size: 1.1rem; margin-top: 10px;">Initializing AI Assistant & Portfolio. Please wait a few seconds...</p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+        with st.spinner(""):
+            time.sleep(2.5)
+    loading_placeholder.empty()
+    st.session_state.initialized = True
+
+# Lightweight self-ping/keep-alive mechanism
+if not getattr(st, "_keep_alive_thread_started", False):
+    host = st.context.headers.get("host")
+    if host:
+        st._keep_alive_thread_started = True
+        protocol = "https" if "localhost" not in host else "http"
+        self_url = f"{protocol}://{host}"
+        
+        def ping_loop():
+            # Wait a bit for the server to be fully running before starting pings
+            time.sleep(10)
+            while True:
+                try:
+                    import requests
+                    requests.get(self_url, timeout=15)
+                except Exception:
+                    pass
+                time.sleep(300)
+                
+        import threading
+        thread = threading.Thread(target=ping_loop, daemon=True)
+        thread.start()
+
+import google.generativeai as genai
 import importlib
 import edit_details
 importlib.reload(edit_details)
@@ -44,12 +91,6 @@ def get_base64_image(image_path):
             return base64.b64encode(image_file.read()).decode("utf-8")
     except Exception as e:
         return ""
-
-
-def load_css():
-    st.markdown('<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">', unsafe_allow_html=True)
-    with open("assets/css/style.css", "r", encoding="utf-8") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
 def build_profile_data():
@@ -119,7 +160,7 @@ def open_chat(question=None):
     st.rerun()
 
 
-load_css()
+
 
 import os
 # Load API key dynamically from Streamlit secrets (deployment) or environment variables (local)
@@ -250,6 +291,15 @@ if not st.session_state.chat_open:
                 </div>
                 """, unsafe_allow_html=True)
                 
+                # If this is the Fault Isolation project, add the image expander inside this column
+                if "Resilient Street-Level" in project["name"]:
+                    st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
+                    with st.expander("🖼️ View System Prototype"):
+                        fault_iso_b64 = get_base64_image("assets/img/fault_isolation/fault_isolation.png")
+                        if fault_iso_b64:
+                            st.markdown(f'<img src="data:image/png;base64,{fault_iso_b64}" style="width:100%; border-radius:8px; border: 1px solid rgba(255, 255, 255, 0.08); margin-bottom:0.5rem;" />', unsafe_allow_html=True)
+                            st.caption("Resilient Smart Distribution & Fault Isolation System hardware prototype.")
+
                 # If this is the Precision Irrigation project, add the image button/expander inside this column!
                 if "Precision Irrigation" in project["name"]:
                     st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
@@ -281,7 +331,7 @@ if not st.session_state.chat_open:
         target_col = col_int1 if i % 2 == 0 else col_int2
         with target_col:
             st.markdown(f"""
-            <div style="background: rgba(17, 24, 39, 0.45); padding: 1.25rem; border-radius: 16px 16px 0 0; border: 1px solid rgba(255, 255, 255, 0.06); border-bottom: none; min-height: 220px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="background: rgba(17, 24, 39, 0.45); padding: 1.25rem; border-radius: 16px 16px 0 0; border: 1px solid rgba(255, 255, 255, 0.06); border-bottom: none; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between;">
                 <div style="display: flex; gap: 0.85rem; align-items: flex-start;">
                     <span style="font-size: 1.5rem; background: rgba(34, 197, 94, 0.1); padding: 0.5rem; border-radius: 10px; display: inline-block; line-height: 1;">{intern['icon']}</span>
                     <div>
@@ -289,7 +339,6 @@ if not st.session_state.chat_open:
                         <p style="margin: 2px 0; color: #a5b4fc; font-size: 0.85rem; font-weight: 500;">{intern['company']}</p>
                         <p style="margin: 0; color: #94a3b8; font-size: 0.8rem; font-style: italic;">{intern['duration']}</p>
                         <p style="margin: 8px 0 0 0; color: #cbd5e1; font-size: 0.85rem; line-height: 1.5;">{intern['desc']}</p>
-                        <p style="margin: 8px 0 0 0; color: #10b981; font-size: 0.82rem; line-height: 1.45;">{intern['achievements']}</p>
                     </div>
                 </div>
             </div>

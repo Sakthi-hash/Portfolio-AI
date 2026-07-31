@@ -111,7 +111,7 @@ Academic & Engineering Projects:
 Education:
 - Sri Krishna College of Technology, Coimbatore, Tamil Nadu
   Bachelor of Engineering (Electronics and Communication Engineering)
-  CGPA: 7.2 (Lateral Entry) | No History of Arrears | Expected Graduation: May 2027
+  CGPA: 7.18 (Lateral Entry) | No History of Arrears | Expected Graduation: May 2027
 - Sankara Polytechnic College, Coimbatore, Tamil Nadu
   Diploma in Electronics and Communication Engineering
   CGPA: 8.1 (Distinction) | Graduation year: 2024
@@ -129,7 +129,6 @@ Awards & Accomplishments:
 Academic Presentations, Reports & Key Deliverables:
 1. Undergraduate (B.E. - UG) Deliverables:
    - Smart Traffic System (Task Management): Designed an Autonomous Vehicle Task Management Simulator. Presented the control flow and task scheduling simulator to ECE faculty.
-   - Baseband M-ary PAM Transmission: Authored a PPT presentation analyzing multi-level Pulse Amplitude Modulation spectral and bandwidth efficiency.
    - Smart Fabrics for Soldier Health Monitoring: Prepared a detailed research study on biosensors and conductive textile materials for health tracking.
    - Optical Fiber Modes: Conducted an academic seminar analyzing single-mode vs. multi-mode waveguide modes and dispersion.
    - Software Defined Networking (SDN): Prepared a comprehensive SDN technical question bank and controller architecture guide.

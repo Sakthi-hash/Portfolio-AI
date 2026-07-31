@@ -101,8 +101,8 @@ WHY_HIRE_ME = [
     ("💻", "Strong command of C & Embedded C, with verified academic projects running microcontroller firmware"),
     ("⚙️", "4 Hands-on industry internships proving readiness for testing, production, and quality control roles"),
     ("⚡", "Full-cycle hardware builder: experienced in circuit simulation, physical breadboarding, and soldering"),
-    ("🔍", "On-site groundwork specialist: experienced in field layout surveying, mapping legacy pipe systems, and resolving installation blockers"),
-    ("📊", "Strong academics: Distinction in Diploma (8.1 CGPA) & lateral entry B.E. (7.2 CGPA) with no arrears"),
+    ("🎯", "Cross-domain exposure: applied embedded skills across aerospace (CNS/ATC), manufacturing (LED), and agriculture (IoT irrigation) — adapts fast to new problem spaces"),
+    ("📊", "Strong academics: Distinction in Diploma (8.1 CGPA) & lateral entry B.E. (7.18 CGPA) with no arrears"),
     ("🤝", "Proven leadership & crisis management: Coordinated the first post-pandemic 3-day ECE Industrial Visit from scratch, successfully resolving tough on-road situations"),
 ]
 
@@ -122,9 +122,9 @@ SUGGESTED_QUESTIONS = [
 
 # Metrics displayed on the landing page (Label, Value)
 METRICS = [
-    ("Projects Completed", "3"),
+    ("Projects Completed", str(len(PROJECT_DETAILS))),
     ("Internships Done", "4"),
-    ("B.E. CGPA (No Arrears)", "7.2"),
+    ("B.E. CGPA (No Arrears)", "7.18"),
     ("Response Time", "< 3 sec"),
 ]
 
@@ -147,11 +147,7 @@ UG_DELIVERABLES = [
         "type": "B.E. UG Seminar",
         "desc": "Designed and presented an Autonomous Vehicle Task Management Simulator, handling control flow logic and real-time task scheduling simulations.",
     },
-    {
-        "title": "Baseband M-ary PAM Transmission",
-        "type": "PPT Seminar",
-        "desc": "Delivered a technical presentation analyzing Pulse Amplitude Modulation configurations, comparing bandwidth and spectral efficiency metrics.",
-    },
+
     {
         "title": "Smart Fabrics for Soldier Health Monitoring",
         "type": "Research Study",

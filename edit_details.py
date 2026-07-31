@@ -234,8 +234,7 @@ INTERNSHIPS = [
         "duration": "May–June 2023 (30 Days)",
         "desc": "Conducted hand-soldering, LED driver circuit board debugging, and quality inspection during Diploma studies at Sankara Polytechnic.",
         "achievements": "<strong>Company Details:</strong> Brigade LED manufactures specialized optoelectronics and commercial driver boards, maintaining rigorous factory quality control protocols.",
-        "icon": "🔌",
-        "image": "brigade_diploma.jpg"
+        "icon": "🔌"
     }
 ]
 

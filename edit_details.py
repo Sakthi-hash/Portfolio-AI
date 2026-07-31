@@ -124,7 +124,7 @@ SUGGESTED_QUESTIONS = [
 METRICS = [
     ("Projects Completed", str(len(PROJECT_DETAILS))),
     ("Internships Done", "4"),
-    ("B.E. CGPA (No Arrears)", "7.18"),
+    ("B.E. CGPA (No History of Arrears)", "7.18"),
     ("Response Time", "< 3 sec"),
 ]
 

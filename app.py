@@ -230,6 +230,7 @@ if not st.session_state.chat_open:
                 <span>📞 {PHONE}</span>
                 <span>📧 {EMAIL}</span>
                 <span>🎓 {EDUCATION}</span>
+                <span>🏫 Diploma: 8.1 CGPA</span>
                 <span>🤖 Hulk AI Online</span>
             </div>
         </div>

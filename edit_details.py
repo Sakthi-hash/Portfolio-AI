@@ -125,7 +125,7 @@ METRICS = [
     ("Projects Completed", str(len(PROJECT_DETAILS))),
     ("Internships Done", "4"),
     ("B.E. CGPA (No History of Arrears)", "7.18"),
-    ("Response Time", "< 3 sec"),
+    ("Diploma CGPA (Distinction)", "8.1"),
 ]
 
 # Section Titles & Subtitles

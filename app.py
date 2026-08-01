@@ -93,6 +93,92 @@ def get_base64_image(image_path):
         return ""
 
 
+# Helper to write visit logs locally in case of failure or local testing
+def backup_log_visit_locally(role):
+    try:
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        log_line = f"{timestamp},{role}\n"
+        with open("visits_backup.csv", "a", encoding="utf-8") as f:
+            f.write(log_line)
+    except Exception:
+        pass
+
+
+# Helper to authenticate with Google Sheets using Service Account from st.secrets or local credentials.json
+def get_gspread_client():
+    import gspread
+    import json
+    import os
+    
+    # 1. Try loading from st.secrets["gcp_service_account"]
+    if "gcp_service_account" in st.secrets:
+        try:
+            creds_dict = dict(st.secrets["gcp_service_account"])
+            if "private_key" in creds_dict:
+                creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+            return gspread.service_account_from_dict(creds_dict)
+        except Exception:
+            pass
+
+    # 2. Try loading from st.secrets["GOOGLE_CREDENTIALS"] (alternative key / JSON string)
+    if "GOOGLE_CREDENTIALS" in st.secrets:
+        try:
+            creds_data = st.secrets["GOOGLE_CREDENTIALS"]
+            if isinstance(creds_data, str):
+                creds_dict = json.loads(creds_data)
+            else:
+                creds_dict = dict(creds_data)
+            if "private_key" in creds_dict:
+                creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+            return gspread.service_account_from_dict(creds_dict)
+        except Exception:
+            pass
+
+    # 3. Fall back to local credentials.json file
+    local_creds_path = "credentials.json"
+    if os.path.exists(local_creds_path):
+        try:
+            return gspread.service_account(filename=local_creds_path)
+        except Exception:
+            pass
+            
+    return None
+
+
+# Main function to log visit to Google Sheets with local backup fallback
+def log_visit_to_sheets(role):
+    try:
+        from datetime import datetime
+        import gspread
+        
+        gc = get_gspread_client()
+        if not gc:
+            backup_log_visit_locally(role)
+            return False
+            
+        sheet_name = "Portfolio Visits"
+        try:
+            sh = gc.open(sheet_name)
+        except gspread.exceptions.SpreadsheetNotFound:
+            # Create a new spreadsheet if not found
+            sh = gc.create(sheet_name)
+            ws = sh.get_worksheet(0)
+            ws.append_row(["Timestamp", "Role"])
+            
+        worksheet = sh.get_worksheet(0)
+        # Verify if worksheet is empty and needs headers
+        if len(worksheet.get_all_values()) == 0:
+            worksheet.append_row(["Timestamp", "Role"])
+            
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        worksheet.append_row([timestamp, role])
+        return True
+    except Exception:
+        backup_log_visit_locally(role)
+        return False
+
+
 def build_profile_data():
     projects_text = "\n".join(
         f"- {p['name']}: {p['desc']}" for p in PROJECT_DETAILS
@@ -131,6 +217,7 @@ RULES:
    - Use organized markdown tables or blockquotes for listings (like projects, skills, or certifications) to avoid plain text.
    - Keep answers dynamic, creative, and memorable instead of standard plain text.
 7. Respond warmly, politely, and briefly in first person as Sakthikrishna to greetings (e.g. "hi", "hello", "hey", "good morning") or expressions of thanks (e.g. "thank you", "thanks"), introducing yourself and inviting them to ask about your ECE projects or internships.
+8. Do NOT use HTML tags (like <br>, <p>, or <div>) for line breaks or formatting. Use standard Markdown newlines to separate paragraphs.
 
 PROFILE DATA (Structured):
 {build_profile_data()}
@@ -148,7 +235,10 @@ QUESTION:
                 "temperature": AI_TEMPERATURE,
             }
         )
-        return response.text
+        text = response.text
+        if text:
+            text = text.replace("<br>", "\n").replace("<br/>", "\n").replace("<br />", "\n")
+        return text
     except Exception as e:
         return f"I apologize — I'm having a brief connection issue. Please try again. ({e})"
 
@@ -181,57 +271,57 @@ if "pending_question" not in st.session_state:
 # ==================================================
 if not st.session_state.chat_open:
 
-    # Hulk AI top banner with a pointer arrow
+    # 1. Hulk AI Hero Section (The primary centerpiece)
     hulk_b64 = get_base64_image("assets/img/hulk_avatar.jpg")
-    
-    st.markdown("""
-    <div class="hulk-top-banner">
-        <div class="hulk-avatar-wrap">
-    """, unsafe_allow_html=True)
-    if hulk_b64:
-        st.markdown(f'<img src="data:image/jpeg;base64,{hulk_b64}" class="hulk-avatar-img" />', unsafe_allow_html=True)
-    else:
-        st.markdown('<div class="hulk-avatar-placeholder">HULK</div>', unsafe_allow_html=True)
-    
-    st.markdown("""
+    hulk_img_html = f'<div class="hulk-hero-image-wrap"><img src="data:image/jpeg;base64,{hulk_b64}" class="hulk-hero-avatar-img" /></div>' if hulk_b64 else ""
+
+    st.markdown(f"""
+    <div class="hulk-hero-section">
+        <div class="hulk-hero-content">
+            <div class="hulk-hero-badge">🤖 Interactive Recruiter Assistant</div>
+            <h1 class="hulk-hero-title">Meet <span>Hulk AI</span></h1>
+            <p class="hulk-hero-pitch">
+                Hulk AI is my powerhouse recruiter assistant. It has been custom-fed with my complete professional data:
+                my <strong>4 hands-on internships</strong>, <strong>5 major hardware &amp; firmware engineering projects</strong>,
+                academic transcripts (including my <strong>8.1 Diploma CGPA with Distinction</strong> and <strong>7.18 B.E. CGPA</strong>), 
+                and core ECE/embedded skills.
+                <br><br>
+                It is designed to represent me and answer your questions in real-time. Ask Hulk AI about my technical depth, circuit designs, programming expertise, or culture fit!
+            </p>
         </div>
-        <div class="hulk-text-wrap">
-            <span class="hulk-arrow">➔ 🤖 Meet Hulk AI</span>
-            <p class="hulk-pitch">My powerhouse assistant. Ready to <strong>SMASH</strong> through ECE/Embedded questions! Click the button below to start chat.</p>
-        </div>
+        {hulk_img_html}
     </div>
     """, unsafe_allow_html=True)
-    
-    col_top_btn1, col_top_btn2 = st.columns(2)
-    with col_top_btn1:
-        if st.button("💬 Smash to Chat with Hulk AI ➔", key="hulk_top_chat_btn", use_container_width=True):
-            open_chat()
-    with col_top_btn2:
-        st.link_button("📄 Check out the resume ➔", "https://drive.google.com/file/d/1WKLjid4-Q7w13k7IvEyYsQiXEmEqbrXD/view?usp=sharing", use_container_width=True)
-        
-    st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
 
+    col_hulk_btn1, col_hulk_btn2 = st.columns(2)
+    with col_hulk_btn1:
+        if st.button("💬 Ask Hulk AI Anything (Get Instant Answers) ➔", key="hulk_hero_chat_btn", use_container_width=True):
+            open_chat()
+    with col_hulk_btn2:
+        st.link_button("📄 Check out the resume ➔", "https://drive.google.com/file/d/1WKLjid4-Q7w13k7IvEyYsQiXEmEqbrXD/view?usp=sharing", use_container_width=True)
+
+    st.markdown("<div style='margin-top: 35px;'></div>", unsafe_allow_html=True)
+
+    # 2. Developer Profile Hero Section (Intro of Sakthikrishna)
     profile_base64 = get_base64_image("assets/img/profile.jpg")
     profile_img_html = f'<div class="hero-image-wrap"><img src="data:image/jpeg;base64,{profile_base64}" class="hero-profile-img" /></div>' if profile_base64 else ""
 
     st.markdown(f"""
-    <div class="hero-section">
+    <div class="hero-section" style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.45) 0%, rgba(15, 23, 42, 0.25) 100%);">
         <div class="hero-content">
-            <div class="hero-badge">Open to Opportunities</div>
-            <h1 class="hero-name">{NAME}</h1>
+            <div class="hero-badge" style="background: rgba(6, 182, 212, 0.08); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.2);">Developer Profile</div>
+            <h2 class="hero-name" style="font-size: 2.2rem; margin-top: 0.5rem; color: #ffffff; font-family: 'Outfit', sans-serif;">{NAME}</h2>
             <p class="hero-tagline">{TAGLINE}</p>
             <p class="hero-pitch">
                 Hi — I'm <strong style="color:#e2e8f0;">{NAME}</strong>.
-                I build robust embedded hardware systems and write highly optimized C code. 
-                This AI-powered portfolio showcases my design skills, internships, and engineering projects.
-                <strong style="color:#22d3ee;">Ask Hulk AI anything to evaluate my fit for your team.</strong>
+                I build robust embedded hardware systems, write highly optimized firmware, and develop smart IoT solutions. 
+                Explore my full credentials, engineering projects, and internships below.
             </p>
             <div class="hero-meta">
                 <span>📞 {PHONE}</span>
                 <span>📧 {EMAIL}</span>
                 <span>🎓 {EDUCATION}</span>
                 <span>🏫 Diploma: 8.1 CGPA</span>
-                <span>🤖 Hulk AI Online</span>
             </div>
         </div>
         {profile_img_html}
@@ -307,16 +397,12 @@ if not st.session_state.chat_open:
                     with st.expander("🖼️ View On-Site Gallery"):
                         meeting_b64 = get_base64_image("assets/img/precision_irrigation/meeting.jpg")
                         field_visit_b64 = get_base64_image("assets/img/precision_irrigation/field_visit.jpg")
-                        plaque_b64 = get_base64_image("assets/img/precision_irrigation/plaque.jpg")
                         if meeting_b64:
                             st.markdown(f'<img src="data:image/jpeg;base64,{meeting_b64}" style="width:100%; border-radius:8px; border: 1px solid rgba(255, 255, 255, 0.08); margin-bottom:0.5rem;" />', unsafe_allow_html=True)
                             st.caption("Farmer beneficiary allotment.")
                         if field_visit_b64:
                             st.markdown(f'<img src="data:image/jpeg;base64,{field_visit_b64}" style="width:100%; border-radius:8px; border: 1px solid rgba(255, 255, 255, 0.08); margin-bottom:0.5rem;" />', unsafe_allow_html=True)
                             st.caption("Field survey & pipeline mapping.")
-                        if plaque_b64:
-                            st.markdown(f'<img src="data:image/jpeg;base64,{plaque_b64}" style="width:100%; border-radius:8px; border: 1px solid rgba(255, 255, 255, 0.08); margin-bottom:0.5rem;" />', unsafe_allow_html=True)
-                            st.caption("<strong>UBA Funded</strong> (IIT-D Sanctioned).")
 
     st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
@@ -504,6 +590,57 @@ if not st.session_state.chat_open:
     if st.button("✦  Chat with Hulk AI  →", use_container_width=True):
         open_chat()
 
+    st.markdown('<div style="margin-top: 30px;"></div>', unsafe_allow_html=True)
+
+    # Show visitor check-in form near the bottom of the landing page (only if not already submitted/dismissed)
+    if "visitor_id_dismissed" not in st.session_state:
+        st.session_state.visitor_id_dismissed = False
+    if "visitor_id_submitted" not in st.session_state:
+        st.session_state.visitor_id_submitted = False
+
+    if not st.session_state.visitor_id_dismissed and not st.session_state.visitor_id_submitted:
+        st.markdown("""
+            <style>
+            .visitor-prompt-container {
+                background: rgba(17, 24, 39, 0.55);
+                border: 1px dashed rgba(34, 211, 238, 0.25);
+                border-radius: 12px;
+                padding: 14px 18px;
+                margin-bottom: 20px;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+        
+        with st.container():
+            st.markdown('<div class="visitor-prompt-container">', unsafe_allow_html=True)
+            # Sleek horizontal columns
+            v_col1, v_col2, v_col3 = st.columns([1.8, 0.8, 0.4])
+            
+            with v_col1:
+                role = st.selectbox(
+                    "Who's checking this out?",
+                    ["Select Role...", "Recruiter", "HR", "Friend/Family", "Fellow Student", "Other"],
+                    key="visitor_role",
+                    label_visibility="collapsed"
+                )
+                st.markdown("<p style='margin: -8px 0 0 0; font-size: 0.78rem; color: #64748b;'>Who's checking this out?</p>", unsafe_allow_html=True)
+                
+            with v_col2:
+                is_disabled = (role == "Select Role...")
+                if st.button("Submit ➔", key="btn_visitor_submit", use_container_width=True, disabled=is_disabled):
+                    log_visit_to_sheets(role)
+                    st.session_state.visitor_id_submitted = True
+                    st.success("Thanks for sharing!")
+                    time.sleep(1)
+                    st.rerun()
+                    
+            with v_col3:
+                if st.button("Skip", key="btn_visitor_skip", use_container_width=True):
+                    st.session_state.visitor_id_dismissed = True
+                    st.rerun()
+                    
+            st.markdown('</div>', unsafe_allow_html=True)
+
     st.markdown(f"""
     <div class="site-footer">
         Built with Python · Streamlit · Hulk AI · by {NAME}
@@ -564,6 +701,10 @@ else:
                 st.rerun()
 
     with chat_col:
+        for msg in st.session_state.messages:
+            with st.chat_message(msg["role"]):
+                st.markdown(msg["content"])
+
         if st.session_state.pending_question:
             q = st.session_state.pending_question
             st.session_state.pending_question = None
@@ -575,10 +716,6 @@ else:
             with st.chat_message("assistant"):
                 st.markdown(answer)
             st.session_state.messages.append({"role": "assistant", "content": answer})
-
-        for msg in st.session_state.messages:
-            with st.chat_message(msg["role"]):
-                st.markdown(msg["content"])
 
         question = st.chat_input(f"Ask Hulk AI about {NAME}'s skills, projects, or experience...")
 

@@ -1,0 +1,16 @@
+name: Keep App Awake
+
+on:
+  schedule:
+    # Runs every 6 hours to keep the Streamlit app active and prevent sleeping
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
+
+jobs:
+  ping_streamlit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping App URL
+        run: |
+          # Replace the URL below with your actual deployed Streamlit App URL if it is different
+          curl -I -s -L "https://portfolio-ai.streamlit.app" || true

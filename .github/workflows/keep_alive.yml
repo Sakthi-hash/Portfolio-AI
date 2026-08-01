@@ -13,4 +13,4 @@ jobs:
       - name: Ping App URL
         run: |
           # Replace the URL below with your actual deployed Streamlit App URL if it is different
-          curl -I -s -L "https://portfolio-ai.streamlit.app" || true
+          curl -I -s -L "https://sakthikrishna-ai.streamlit.app/" || true

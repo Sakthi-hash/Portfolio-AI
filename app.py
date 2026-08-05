@@ -675,10 +675,7 @@ else:
             st.session_state.trigger_response = False
             st.rerun()
             
-        st.markdown("""
-        <div class="sidebar-section-title">HISTORY</div>
-        <div class="sidebar-history-item">Current session active</div>
-        """, unsafe_allow_html=True)
+
         
         # Spacer to push profile details to the bottom
         st.markdown("<div style='flex-grow: 1; min-height: 160px;'></div>", unsafe_allow_html=True)

@@ -893,13 +893,14 @@ div[data-testid="stChatMessage"]:has([data-testid*="Assistant"]) div[data-testid
     gap: 0.5rem;
 }
 .sidebar-logo-icon {
-    background: linear-gradient(135deg, #a855f7, #6366f1);
+    background: linear-gradient(135deg, #22c55e, #15803d) !important;
     color: white;
     padding: 0.25rem 0.6rem;
     border-radius: 8px;
     font-size: 1.25rem;
     line-height: 1;
     font-weight: 800;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.4) !important;
 }
 
 /* Target the first column (side_col) buttons to look like the purple buttons in the reference screenshot */
@@ -986,7 +987,7 @@ div[data-testid="column"]:nth-of-type(1) div.stLinkButton > a:hover {
     width: 64px;
     height: 64px;
     border-radius: 18px;
-    background: linear-gradient(135deg, #a855f7, #6366f1);
+    background: linear-gradient(135deg, #22c55e, #15803d) !important;
     color: white;
     font-size: 2.2rem;
     font-weight: 800;
@@ -994,7 +995,7 @@ div[data-testid="column"]:nth-of-type(1) div.stLinkButton > a:hover {
     align-items: center;
     justify-content: center;
     margin: 0 auto 1.5rem auto;
-    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.35), 0 0 15px rgba(99, 102, 241, 0.15);
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4), 0 0 15px rgba(34, 197, 94, 0.2) !important;
 }
 .chat-empty-title {
     font-family: 'Outfit', sans-serif;
@@ -1031,6 +1032,28 @@ div[data-testid="column"]:nth-of-type(2) div.stButton > button:hover {
     background: rgba(168, 85, 247, 0.04) !important;
     color: #c084fc !important;
     transform: translateY(-1px) !important;
+}
+
+
+/* Bright chat bubble font color overrides to prevent dimming */
+div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] p,
+div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] li,
+div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] span,
+div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] strong,
+div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] blockquote,
+div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] h1,
+div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] h2,
+div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] h3,
+div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] td,
+div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] th {
+    color: #f8fafc !important; /* High brightness white-slate */
+}
+
+div[data-testid="stChatMessage"]:has([data-testid*="user"]) div[data-testid="stChatMessageContent"] p,
+div[data-testid="stChatMessage"]:has([data-testid*="user"]) div[data-testid="stChatMessageContent"] li,
+div[data-testid="stChatMessage"]:has([data-testid*="user"]) div[data-testid="stChatMessageContent"] span,
+div[data-testid="stChatMessage"]:has([data-testid*="user"]) div[data-testid="stChatMessageContent"] strong {
+    color: #ffffff !important; /* Solid solid white */
 }
 
 

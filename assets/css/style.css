@@ -578,35 +578,50 @@ div[data-testid="column"] div.stButton > button:hover {
 }
 
 /* Chat Messages bubble customization */
-[data-testid="stChatMessage"] {
+div[data-testid="stChatMessage"] {
     background: transparent !important;
-    padding: 0.75rem 0 !important;
+    padding: 0.85rem 0 !important;
+    border: none !important;
 }
 
-/* User Message Box (Right align feeling) */
-[data-testid="stChatMessage"][data-testid="stChatMessage"] {
-    /* base container adjustment if needed */
-}
-
-[data-testid="stChatMessageContent"] {
-    border-radius: 18px !important;
-    padding: 1.1rem 1.4rem !important;
-    line-height: 1.7 !important;
+div[data-testid="stChatMessageContent"] {
+    line-height: 1.75 !important;
     font-size: 0.95rem !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* User Bubble Styles */
-[data-testid="stChatMessage"]:has(div.st-emotion-cache-121516t) [data-testid="stChatMessageContent"] {
-    background: rgba(99, 102, 241, 0.1) !important;
-    border: 1px solid rgba(99, 102, 241, 0.22) !important;
+/* User Message Bubble styling */
+div[data-testid="stChatMessage"]:has([data-testid*="user"]) {
+    flex-direction: row-reverse !important;
+}
+div[data-testid="stChatMessage"]:has([data-testid*="User"]) {
+    flex-direction: row-reverse !important;
 }
 
-/* Assistant Bubble Styles */
-[data-testid="stChatMessage"]:has(div.st-emotion-cache-1279tbg) [data-testid="stChatMessageContent"] {
-    background: rgba(15, 23, 42, 0.45) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    border-left: 3px solid #06b6d4 !important;
+div[data-testid="stChatMessage"]:has([data-testid*="user"]) div[data-testid="stChatMessageContent"],
+div[data-testid="stChatMessage"]:has([data-testid*="User"]) div[data-testid="stChatMessageContent"] {
+    background: #a855f7 !important; /* Radiant violet color from reference image */
+    color: #ffffff !important;
+    border-radius: 20px 20px 4px 20px !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.25) !important;
+    margin-left: auto !important;
+    padding: 0.85rem 1.25rem !important;
+}
+
+div[data-testid="stChatMessage"]:has([data-testid*="user"]) div[data-testid="stChatMessageContent"] p,
+div[data-testid="stChatMessage"]:has([data-testid*="User"]) div[data-testid="stChatMessageContent"] p {
+    color: #ffffff !important;
+}
+
+/* Assistant Message Bubble styling */
+div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"],
+div[data-testid="stChatMessage"]:has([data-testid*="Assistant"]) div[data-testid="stChatMessageContent"] {
+    background: rgba(17, 24, 39, 0.6) !important; /* Sleek dark card */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #f1f5f9 !important;
+    border-radius: 20px 20px 20px 4px !important;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3) !important;
+    padding: 1rem 1.5rem !important;
 }
 
 /* Site Footer */
@@ -863,6 +878,159 @@ div[data-testid="column"] div.stButton > button:hover {
     .hulk-hero-title {
         font-size: 2.2rem;
     }
+}
+
+
+/* ── Sidebar Layout (Left column in Chat) ── */
+.sidebar-logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.sidebar-logo-icon {
+    background: linear-gradient(135deg, #a855f7, #6366f1);
+    color: white;
+    padding: 0.25rem 0.6rem;
+    border-radius: 8px;
+    font-size: 1.25rem;
+    line-height: 1;
+    font-weight: 800;
+}
+
+/* Target the first column (side_col) buttons to look like the purple buttons in the reference screenshot */
+div[data-testid="column"]:nth-of-type(1) div.stButton > button {
+    background: rgba(168, 85, 247, 0.12) !important;
+    color: #c084fc !important;
+    border: 1px solid rgba(168, 85, 247, 0.25) !important;
+    border-radius: 12px !important;
+    padding: 0.65rem 1.25rem !important;
+    font-weight: 700 !important;
+    font-family: 'Outfit', sans-serif !important;
+    transition: all 0.3s ease !important;
+    font-size: 0.9rem !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+div[data-testid="column"]:nth-of-type(1) div.stButton > button:hover {
+    background: #a855f7 !important;
+    color: white !important;
+    border-color: #a855f7 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4) !important;
+}
+
+div[data-testid="column"]:nth-of-type(1) div.stLinkButton > a {
+    background: transparent !important;
+    color: #94a3b8 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    font-size: 0.85rem !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    display: block !important;
+    padding: 0.6rem 1rem !important;
+    transition: all 0.25s ease !important;
+    font-weight: 600 !important;
+}
+div[data-testid="column"]:nth-of-type(1) div.stLinkButton > a:hover {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #f1f5f9 !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.sidebar-section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: 0.05em;
+    margin: 1.8rem 0 0.6rem 0;
+    text-transform: uppercase;
+}
+.sidebar-history-item {
+    background: rgba(168, 85, 247, 0.06) !important;
+    border: 1px solid rgba(168, 85, 247, 0.15) !important;
+    color: #c084fc !important;
+    padding: 0.65rem 1rem !important;
+    border-radius: 10px !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.sidebar-profile-box {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+.sidebar-profile-box h4 {
+    font-family: 'Outfit', sans-serif;
+    margin: 0 0 4px 0;
+    color: #f8fafc;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+/* ── Chat Empty State (Centerpiece) ── */
+.chat-empty-state {
+    text-align: center;
+    padding: 4.5rem 1rem 2rem 1rem;
+}
+.chat-empty-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #a855f7, #6366f1);
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem auto;
+    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.35), 0 0 15px rgba(99, 102, 241, 0.15);
+}
+.chat-empty-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.02em;
+}
+.chat-empty-subtitle {
+    font-size: 1rem;
+    color: #64748b;
+    margin: 0 auto 2.5rem auto;
+    max-width: 500px;
+    line-height: 1.55;
+}
+
+/* Suggested Question Buttons Custom overrides */
+div[data-testid="column"]:nth-of-type(2) div.stButton > button {
+    background: rgba(17, 24, 39, 0.45) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    color: #94a3b8 !important;
+    font-size: 0.85rem !important;
+    border-radius: 12px !important;
+    padding: 0.75rem 1.25rem !important;
+    text-align: left !important;
+    display: inline-block !important;
+    font-weight: 500 !important;
+    transition: all 0.25s ease !important;
+    margin-bottom: 0.5rem !important;
+}
+div[data-testid="column"]:nth-of-type(2) div.stButton > button:hover {
+    border-color: rgba(168, 85, 247, 0.3) !important;
+    background: rgba(168, 85, 247, 0.04) !important;
+    color: #c084fc !important;
+    transform: translateY(-1px) !important;
 }
 
 

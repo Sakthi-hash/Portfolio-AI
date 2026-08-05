@@ -652,67 +652,91 @@ if not st.session_state.chat_open:
 # ==================================================
 else:
 
-    col_back, col_title = st.columns([1, 5])
-    with col_back:
-        st.markdown('<div class="back-btn">', unsafe_allow_html=True)
-        if st.button("← Back"):
+    # Layout with sidebar on the left and chat main area on the right, mirroring reference screenshot
+    side_col, chat_col = st.columns([1, 3.2])
+
+    with side_col:
+        # Back button to return to portfolio
+        st.markdown('<div class="back-btn" style="margin-bottom: 1.25rem;">', unsafe_allow_html=True)
+        if st.button("← Back to Portfolio", key="back_to_portfolio_btn", use_container_width=True):
             st.session_state.chat_open = False
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown(f"""
-    <div class="chat-header">
-        <h1>✦ Hulk AI — {NAME}</h1>
-        <p>Ask Hulk AI anything about my skills, projects, experience, or fit for your role. I respond instantly.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    chat_col, side_col = st.columns([2.5, 1])
-
-    with side_col:
-        st.markdown(f"""
-        <div class="sidebar-profile">
-            <h3>{NAME}</h3>
-            <p>{TAGLINE}</p>
-            <p>📞 {PHONE}</p>
-            <p>📧 {EMAIL}</p>
-            <p>🎓 {EDUCATION}</p>
-            <div class="tech-stack">
-                <span class="tech-pill">Hulk AI</span>
-                <span class="tech-pill">Gemini 2.5</span>
-                <span class="tech-pill">Python</span>
-                <span class="tech-pill">Streamlit</span>
-            </div>
+        st.markdown("""
+        <div class="sidebar-logo">
+            <span class="sidebar-logo-icon">✦</span> Hulk AI
         </div>
         """, unsafe_allow_html=True)
-
-        st.link_button("📄 Check out the resume ➔", "https://drive.google.com/file/d/1WKLjid4-Q7w13k7IvEyYsQiXEmEqbrXD/view?usp=sharing", use_container_width=True)
-        st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
-
-        st.markdown("**Quick strengths**")
-        for icon, text in WHY_HIRE_ME[:4]:
-            st.markdown(f"{icon} {text}")
-
-        st.markdown("")
-        st.markdown("**Try asking:**")
-        for q in SUGGESTED_QUESTIONS[:3]:
-            if st.button(q, key=f"side_{q[:15]}", use_container_width=True):
-                st.session_state.pending_question = q
-                st.rerun()
+        
+        if st.button("＋ New conversation", key="new_conv_btn", use_container_width=True):
+            st.session_state.messages = []
+            st.session_state.pending_question = None
+            st.session_state.trigger_response = False
+            st.rerun()
+            
+        st.markdown("""
+        <div class="sidebar-section-title">HISTORY</div>
+        <div class="sidebar-history-item">Current session active</div>
+        """, unsafe_allow_html=True)
+        
+        # Spacer to push profile details to the bottom
+        st.markdown("<div style='flex-grow: 1; min-height: 160px;'></div>", unsafe_allow_html=True)
+        
+        # Developer Profile Info Box
+        st.markdown(f"""
+        <div class="sidebar-profile-box">
+            <h4>{NAME}</h4>
+            <p style="font-size: 0.8rem; color: #a5b4fc; margin-bottom: 8px;">{TAGLINE}</p>
+            <p style="font-size: 0.75rem; color: #94a3b8; margin: 2px 0;">📞 {PHONE}</p>
+            <p style="font-size: 0.75rem; color: #94a3b8; margin: 2px 0;">📧 {EMAIL}</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.link_button("📄 Open Resume PDF ➔", "https://drive.google.com/file/d/1WKLjid4-Q7w13k7IvEyYsQiXEmEqbrXD/view?usp=sharing", use_container_width=True)
 
     with chat_col:
-        for msg in st.session_state.messages:
-            with st.chat_message(msg["role"]):
-                st.markdown(msg["content"])
+        # Initialize trigger_response flag if not present
+        if "trigger_response" not in st.session_state:
+            st.session_state.trigger_response = False
 
+        # Render empty state or standard chat list
+        if len(st.session_state.messages) == 0:
+            st.markdown(f"""
+            <div class="chat-empty-state">
+                <div class="chat-empty-icon">✦</div>
+                <h1 class="chat-empty-title">What can I help you with?</h1>
+                <p class="chat-empty-subtitle">Powered by Gemini 2.5 — custom-fed with Sakthikrishna's ECE &amp; Embedded records.</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Grid of 4 suggested question buttons (prompt chips)
+            q_col1, q_col2 = st.columns(2)
+            for idx, q in enumerate(SUGGESTED_QUESTIONS[:4]):
+                target_col = q_col1 if idx % 2 == 0 else q_col2
+                with target_col:
+                    if st.button(q, key=f"empty_q_{idx}", use_container_width=True):
+                        st.session_state.pending_question = q
+                        st.rerun()
+        else:
+            for msg in st.session_state.messages:
+                with st.chat_message(msg["role"]):
+                    st.markdown(msg["content"])
+
+        # Handle pending question click triggers
         if st.session_state.pending_question:
             q = st.session_state.pending_question
             st.session_state.pending_question = None
             st.session_state.messages.append({"role": "user", "content": q})
-            with st.chat_message("user"):
-                st.markdown(q)
+            st.session_state.trigger_response = True
+            st.rerun()
+
+        # Execute AI response when trigger flag is set
+        if st.session_state.trigger_response:
+            st.session_state.trigger_response = False
+            last_msg = st.session_state.messages[-1]["content"]
             with st.spinner("Preparing your briefing..."):
-                answer = ask_ai(q)
+                answer = ask_ai(last_msg)
             with st.chat_message("assistant"):
                 st.markdown(answer)
             st.session_state.messages.append({"role": "assistant", "content": answer})

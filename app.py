@@ -746,6 +746,26 @@ else:
 
     with chat_col:
         st.markdown('<div id="chat-anchor"></div>', unsafe_allow_html=True)
+
+        # Scroll down to chat only on mobile if scroll_to_chat is triggered
+        if st.session_state.get("scroll_to_chat", False):
+            js = """
+            <script>
+                setTimeout(function() {
+                    if (window.parent && window.parent.document) {
+                        if (window.parent.innerWidth <= 768) {
+                            var element = window.parent.document.getElementById("chat-anchor");
+                            if (element) {
+                                element.scrollIntoView({behavior: "smooth"});
+                            }
+                        }
+                    }
+                }, 100);
+            </script>
+            """
+            components.html(js, height=0, width=0)
+            st.session_state.scroll_to_chat = False
+
         # Initialize trigger_response flag if not present
         if "trigger_response" not in st.session_state:
             st.session_state.trigger_response = False
@@ -791,21 +811,3 @@ else:
             with st.chat_message("assistant"):
                 answer = st.write_stream(ask_ai_stream(question))
             st.session_state.messages.append({"role": "assistant", "content": answer})
-
-        if st.session_state.get("scroll_to_chat", False):
-            js = """
-            <script>
-                setTimeout(function() {
-                    if (window.parent && window.parent.document) {
-                        if (window.parent.innerWidth <= 768) {
-                            var element = window.parent.document.getElementById("chat-anchor");
-                            if (element) {
-                                element.scrollIntoView({behavior: "smooth"});
-                            }
-                        }
-                    }
-                }, 100);
-            </script>
-            """
-            components.html(js, height=0, width=0)
-            st.session_state.scroll_to_chat = False

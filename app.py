@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import base64
 import time
 
@@ -292,6 +293,7 @@ def open_chat(question=None):
     st.session_state.chat_open = True
     if question:
         st.session_state.pending_question = question
+        st.session_state.scroll_to_chat = True
     st.rerun()
 
 
@@ -724,6 +726,7 @@ else:
         for idx, q in enumerate(SUGGESTED_QUESTIONS[:4]):
             if st.button(q, key=f"side_q_{idx}", use_container_width=True):
                 st.session_state.pending_question = q
+                st.session_state.scroll_to_chat = True
                 st.rerun()
         
         # Spacer to push profile details to the bottom
@@ -742,6 +745,7 @@ else:
         st.link_button("📄 Open Resume PDF ➔", "https://drive.google.com/file/d/1WKLjid4-Q7w13k7IvEyYsQiXEmEqbrXD/view?usp=sharing", use_container_width=True)
 
     with chat_col:
+        st.markdown('<div id="chat-anchor"></div>', unsafe_allow_html=True)
         # Initialize trigger_response flag if not present
         if "trigger_response" not in st.session_state:
             st.session_state.trigger_response = False
@@ -767,6 +771,7 @@ else:
             st.session_state.pending_question = None
             st.session_state.messages.append({"role": "user", "content": q})
             st.session_state.trigger_response = True
+            st.session_state.scroll_to_chat = True
             st.rerun()
 
         # Execute AI response when trigger flag is set
@@ -786,3 +791,21 @@ else:
             with st.chat_message("assistant"):
                 answer = st.write_stream(ask_ai_stream(question))
             st.session_state.messages.append({"role": "assistant", "content": answer})
+
+        if st.session_state.get("scroll_to_chat", False):
+            js = """
+            <script>
+                setTimeout(function() {
+                    if (window.parent && window.parent.document) {
+                        if (window.parent.innerWidth <= 768) {
+                            var element = window.parent.document.getElementById("chat-anchor");
+                            if (element) {
+                                element.scrollIntoView({behavior: "smooth"});
+                            }
+                        }
+                    }
+                }, 100);
+            </script>
+            """
+            components.html(js, height=0, width=0)
+            st.session_state.scroll_to_chat = False

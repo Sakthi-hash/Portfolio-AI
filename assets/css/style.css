@@ -1035,25 +1035,29 @@ div[data-testid="column"]:nth-of-type(2) div.stButton > button:hover {
 }
 
 
-/* Bright chat bubble font color overrides to prevent dimming */
-div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] p,
-div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] li,
-div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] span,
-div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] strong,
-div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] blockquote,
-div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] h1,
-div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] h2,
-div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] h3,
-div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] td,
-div[data-testid="stChatMessage"]:has([data-testid*="assistant"]) div[data-testid="stChatMessageContent"] th {
-    color: #f8fafc !important; /* High brightness white-slate */
+/* Bright chat bubble font color overrides to prevent dimming and make text bold/clear */
+div[data-testid="stChatMessage"] div[data-testid="stChatMessageContent"] p,
+div[data-testid="stChatMessage"] div[data-testid="stChatMessageContent"] li,
+div[data-testid="stChatMessage"] div[data-testid="stChatMessageContent"] span,
+div[data-testid="stChatMessage"] div[data-testid="stChatMessageContent"] blockquote,
+div[data-testid="stChatMessage"] div[data-testid="stChatMessageContent"] td,
+div[data-testid="stChatMessage"] div[data-testid="stChatMessageContent"] th,
+div[data-testid="stChatMessage"] div[data-testid="stMarkdownContainer"] p,
+div[data-testid="stChatMessage"] div[data-testid="stMarkdownContainer"] li,
+div[data-testid="stChatMessage"] div[data-testid="stMarkdownContainer"] span,
+div[data-testid="stChatMessage"] div[data-testid="stMarkdownContainer"] td,
+div[data-testid="stChatMessage"] div[data-testid="stMarkdownContainer"] th {
+    color: #ffffff !important; /* Full bright white */
+    font-weight: 500 !important; /* Medium weight for extra clarity on dark backgrounds */
 }
 
-div[data-testid="stChatMessage"]:has([data-testid*="user"]) div[data-testid="stChatMessageContent"] p,
-div[data-testid="stChatMessage"]:has([data-testid*="user"]) div[data-testid="stChatMessageContent"] li,
-div[data-testid="stChatMessage"]:has([data-testid*="user"]) div[data-testid="stChatMessageContent"] span,
-div[data-testid="stChatMessage"]:has([data-testid*="user"]) div[data-testid="stChatMessageContent"] strong {
-    color: #ffffff !important; /* Solid solid white */
+/* Ensure bold text stands out even more */
+div[data-testid="stChatMessage"] div[data-testid="stChatMessageContent"] strong,
+div[data-testid="stChatMessage"] div[data-testid="stChatMessageContent"] b,
+div[data-testid="stChatMessage"] div[data-testid="stMarkdownContainer"] strong,
+div[data-testid="stChatMessage"] div[data-testid="stMarkdownContainer"] b {
+    color: #ffffff !important;
+    font-weight: 700 !important; /* Extra bold */
 }
 
 

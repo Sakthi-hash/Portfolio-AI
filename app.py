@@ -65,6 +65,7 @@ importlib.reload(edit_details)
 from edit_details import *
 
 # Function to read raw resume context
+@st.cache_data
 def read_resume():
     try:
         with open("resume.txt", "r", encoding="utf-8") as f:
@@ -245,8 +246,10 @@ QUESTION:
 
 
 def ask_ai_stream(question):
-    resume_content = read_resume()
-    prompt = f"""
+    # Wrap initial API call and first chunk retrieval in a spinner for "Thinking..." feedback
+    with st.spinner("Thinking..."):
+        resume_content = read_resume()
+        prompt = f"""
 You are Hulk AI, Sakthikrishna's Personal AI Assistant representing him to recruiters.
 
 RULES:
@@ -272,21 +275,37 @@ RESUME CONTENT (Raw Text):
 QUESTION:
 {question}
 """
+        try:
+            response = model.generate_content(
+                prompt,
+                generation_config={
+                    "temperature": AI_TEMPERATURE,
+                },
+                stream=True
+            )
+            response_iter = iter(response)
+            # Fetch the first chunk under the spinner
+            try:
+                first_chunk = next(response_iter)
+            except StopIteration:
+                first_chunk = None
+        except Exception as e:
+            yield f"I apologize — I'm having a brief connection issue. Please try again. ({e})"
+            return
+
+    # Yield the first chunk once the spinner exits
+    if first_chunk and first_chunk.text:
+        text = first_chunk.text.replace("<br>", "\n").replace("<br/>", "\n").replace("<br />", "\n")
+        yield text
+
+    # Yield the remaining chunks
     try:
-        response = model.generate_content(
-            prompt,
-            generation_config={
-                "temperature": AI_TEMPERATURE,
-            },
-            stream=True
-        )
-        for chunk in response:
+        for chunk in response_iter:
             if chunk.text:
-                text = chunk.text
-                text = text.replace("<br>", "\n").replace("<br/>", "\n").replace("<br />", "\n")
+                text = chunk.text.replace("<br>", "\n").replace("<br/>", "\n").replace("<br />", "\n")
                 yield text
     except Exception as e:
-        yield f"I apologize — I'm having a brief connection issue. Please try again. ({e})"
+        yield f"\n\nI apologize — connection was interrupted. Please try again. ({e})"
 
 
 def open_chat(question=None):
